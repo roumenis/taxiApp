@@ -1,3 +1,9 @@
+<script setup>
+  import { useAuth } from '@/stores/auth';
+
+  const auth = useAuth();
+</script>
+
 <template>
   <nav class="nav">
     <router-link to="/" class="nav-link">
@@ -8,9 +14,12 @@
       Moje rezervace
     </router-link>
 
-    <router-link to="/admin" class="nav-link">
+    <router-link v-if="auth.isAdmin" to="/admin" class="nav-link">
       Admin
     </router-link>
+
+    <button @click="auth.logout" class="nav-link logout">Odhlásit se</button>
+
   </nav>
 </template>
 
@@ -18,7 +27,7 @@
 .nav {
   display: flex;
   gap: 2rem;
-  padding: 1rem 0;
+  padding: 1rem 2rem;
   justify-content: center;
   background: #fff;
   border-radius: 8px;
@@ -44,5 +53,8 @@
   background-color: #667eea;
   color: white;
   font-weight: bold;
+}
+.logout {
+  margin-left: auto;
 }
 </style>

@@ -1,25 +1,20 @@
 <script setup>
 
-    import { ref } from 'vue';
+    import { ref, watch } from 'vue';
     import VehicleList from '@/components/vehicles/VehicleList.vue';
+    import vehiclesData from '@/data/vehicles.json';
 
-    const dateFrom = ref('');
-    const dateTo = ref('');
+    const today = new Date().toISOString().split('T')[0];
+    const dateFrom = ref(today);
+    const dateTo = ref(today);
 
-    const vehicles = ref([
-        {
-            id: 1,
-            name: 'Škoda Octavia',
-            license_plate: '1AB 2345',
-            current_km: 120345,
-        },
-        { 
-            id: 2,
-            name: 'VW Passat',
-            license_plate: '2BC 6789',
-            current_km: 98200,
-        },
-    ])
+    watch(dateFrom, (newFrom) => {
+      if (dateTo.value && dateTo.value < newFrom) {
+        dateTo.value = newFrom;
+      }
+    })
+
+    const vehicles = ref(vehiclesData)
 
     const search = () => {
         console.log('Vyhledat vozidla', dateFrom.value, dateTo.value)
@@ -32,16 +27,22 @@
     <div class="filters">
         <div class="filter-group">
             <label for="dateFrom">Od:</label>
-            <input id="dateFrom" type="date" v-model="dateFrom">
+            <input id="dateFrom" 
+                   type="date" 
+                   v-model="dateFrom"
+                   :min="today">
         </div>
         <div class="filter-group">
             <label for="dateTo">Do:</label>
-            <input id="dateTo" type="date" v-model="dateTo">
+            <input id="dateTo" 
+                   type="date" 
+                   v-model="dateTo"
+                   :min="dateFrom">
         </div>
         <button class="btn btn-primary" @click="search">Vyhledat</button>
     </div>
 
-    <VehicleList :vehicles="vehicles"/>
+    <VehicleList :vehicles="vehicles" :date-from="dateFrom" :date-to="dateTo"/>
 
 </template>
 

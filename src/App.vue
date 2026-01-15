@@ -1,5 +1,8 @@
 <script setup>
   import Nav from '@/components/Nav.vue';
+  import { useAuth } from '@/stores/auth';
+
+  const auth = useAuth();
 </script>
 
 <template>

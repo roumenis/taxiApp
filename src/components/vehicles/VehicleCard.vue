@@ -2,23 +2,36 @@
     import { ref } from 'vue';
     import ReservationModal from '@/components/reservation/ReservationModal.vue';
 
-    defineProps({
+    const props = defineProps({
         vehicle: {
             type: Object,
             required: true
+        },
+        isAvailable: {
+            type: Boolean,
+            default: true
         }
     });
     const showModal = ref(false); 
 </script>
 
 <template>
-    <div class="vehicle-card">
+    <div class="vehicle-card" :class="{ 'vehicle-unavailable': !isAvailable }">
         <h2>{{ vehicle.name }}</h2>
         <div class="vehicle-details">
             <p><strong>SPZ:</strong> {{ vehicle.license_plate }}</p>
             <p><strong>Aktuální stav km:</strong> {{ vehicle.current_km }}</p>
         </div>
-        <button class="btn btn-primary" @click="showModal = true">Rezervovat</button>
+        <div v-if="!isAvailable" class="unavailable-badge">
+            Vozidlo je v tomto období rezervováno
+        </div>
+        <button 
+            class="btn btn-primary" 
+            @click="showModal = true"
+            :disabled="!isAvailable"
+        >
+            {{ isAvailable ? 'Rezervovat' : 'Není dostupné' }}
+        </button>
 
         <ReservationModal
             v-if="showModal"
@@ -43,6 +56,11 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
+.vehicle-unavailable {
+  opacity: 0.7;
+  background-color: #f8f9fa;
+}
+
 .vehicle-card h2 {
   margin-bottom: 1rem;
   color: #333;
@@ -56,6 +74,16 @@
 .vehicle-details p {
   margin: 0.5rem 0;
   color: #666;
+}
+
+.unavailable-badge {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  border: 1px solid #f5c6cb;
 }
 
 .btn {
@@ -74,7 +102,13 @@
   color: white;
 }
 
-.btn-primary:hover {
+.btn-primary:hover:not(:disabled) {
   background-color: #218838;
+}
+
+.btn-primary:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.65;
 }
 </style>

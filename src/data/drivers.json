@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "driver_name": "Jan Novák",
+        "date_of_birth": "1985-03-15",
+        "license_number": "D1234567",
+        "phone": "+420123456789",
+        "email": "jan.novak@example.com",
+        "password": "securepassword",
+        "role": "driver"
+    },
+    {
+        "id": 2,
+        "driver_name": "Petra Svobodová",
+        "date_of_birth": "1990-07-22",
+        "license_number": "D7654321",
+        "phone": "+420987654321",
+        "email": "petra.svobodova@example.com",
+        "password": "password123",
+        "role": "driver"
+    },
+    {
+        "id": 3,
+        "driver_name": "Karel Dvořák",
+        "date_of_birth": "1978-11-05",
+        "license_number": "D1122334",
+        "phone": "+420555666777",
+        "email": "karel.dvorak@example.com",
+        "password": "anothersecurepassword",
+        "role": "admin"
+    }
+]

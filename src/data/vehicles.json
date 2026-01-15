@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "name": "Škoda Octavia",
+    "license_plate": "1AB 2345",
+    "current_km": 120346,
+    "reservations": [
+      {
+        "from": "2026-01-18",
+        "to": "2026-01-20"
+      },
+      {
+        "from": "2026-01-25",
+        "to": "2026-01-28"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "VW Passat",
+    "license_plate": "2BC 6789",
+    "current_km": 98200,
+    "reservations": [
+      {
+        "from": "2026-01-16",
+        "to": "2026-01-17"
+      }
+    ]
+  }
+]
