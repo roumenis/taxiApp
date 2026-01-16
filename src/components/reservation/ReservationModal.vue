@@ -1,6 +1,9 @@
 <script setup>
 defineProps({
-  vehicle: Object,
+  vehicle: {
+    type: Object,
+    required: true
+  }
 })
 
 const emit = defineEmits(['close'])
@@ -15,9 +18,10 @@ const confirm = () => {
   <div class="modal-overlay" @click="emit('close')">
     <div class="modal-content" @click.stop>
       <h3>Rezervace vozidla</h3>
-      <p><strong>Vozidlo:</strong> {{ vehicle.name }}</p>
-      <p><strong>SPZ:</strong> {{ vehicle.license_plate }}</p>
-      <p><strong>Aktuální km:</strong> {{ vehicle.current_km }}</p>
+      <p v-if="vehicle"><strong>Vozidlo:</strong> {{ vehicle.name }} ({{ vehicle.fuel_type }})</p>
+      <p v-if="vehicle"><strong>Motorizace:</strong> {{ vehicle.motorization }}</p>
+      <p v-if="vehicle"><strong>SPZ:</strong> {{ vehicle.license_plate }}</p>
+      <p v-if="vehicle"><strong>Aktuální km:</strong> {{ vehicle.current_km }}</p>
 
       <div class="modal-buttons">
         <button class="btn btn-primary" @click="confirm">Potvrdit</button>

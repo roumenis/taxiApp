@@ -1,6 +1,7 @@
 <script setup>
-    import { ref } from 'vue';
+    import { ref, computed } from 'vue';
     import ReservationModal from '@/components/reservation/ReservationModal.vue';
+    import { useVehicles } from '@/composables/useVehicles';
 
     const props = defineProps({
         vehicle: {
@@ -12,15 +13,23 @@
             default: true
         }
     });
-    const showModal = ref(false); 
+
+    const vehiclesComposable = useVehicles();
+    const showModal = ref(false);
+
+    // Sleduj aktuální auto z composable
+    const currentVehicle = computed(() => {
+        return vehiclesComposable.getVehicleById(props.vehicle.id) || props.vehicle;
+    });
 </script>
 
 <template>
     <div class="vehicle-card" :class="{ 'vehicle-unavailable': !isAvailable }">
-        <h2>{{ vehicle.name }}</h2>
+        <h2>{{ currentVehicle.name }} ( {{ currentVehicle.fuel_type }} )</h2>
         <div class="vehicle-details">
-            <p><strong>SPZ:</strong> {{ vehicle.license_plate }}</p>
-            <p><strong>Aktuální stav km:</strong> {{ vehicle.current_km }}</p>
+            <p><strong>Motorizace:</strong> {{ currentVehicle.motorization }}</p>
+            <p><strong>SPZ:</strong> {{ currentVehicle.license_plate }}</p>
+            <p><strong>Aktuální stav km:</strong> {{ currentVehicle.current_km }}</p>
         </div>
         <div v-if="!isAvailable" class="unavailable-badge">
             Vozidlo je v tomto období rezervováno
@@ -35,7 +44,7 @@
 
         <ReservationModal
             v-if="showModal"
-            :vehicle="vehicle"
+            :vehicle="currentVehicle"
             @close="showModal = false"
         />
     </div>

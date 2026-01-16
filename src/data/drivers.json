@@ -26,7 +26,7 @@
         "license_number": "D1122334",
         "phone": "+420555666777",
         "email": "karel.dvorak@example.com",
-        "password": "anothersecurepassword",
+        "password": "admin",
         "role": "admin"
     }
 ]
