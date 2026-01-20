@@ -1,6 +1,13 @@
-# taxiApp
+## TaxiApp (In progress)
 
-This template should help get you started developing with Vue 3 in Vite.
+A fleet management system built with Vue.js that enables drivers to view available vehicles, make reservations, and manage their bookings. Includes admin functionality for vehicle management.
+
+## Features
+
+- **Driver Portal**: View available vehicles, make and manage reservations.
+- **Admin Panel**: Manage vehicles, track and edit reservations
+- **Vehicle Management**: Add, edit, and monitor fleet vehicles
+- **Reservation System**: Easy booking and return vehicle tracking
 
 ## Recommended IDE Setup
 
