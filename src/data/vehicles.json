@@ -6,16 +6,7 @@
     "motorization": "1.0 TSI 81 kW",
     "license_plate": "1AB 2345",
     "current_km": 120346,
-    "reservations": [
-      {
-        "from": "2026-01-18",
-        "to": "2026-01-20"
-      },
-      {
-        "from": "2026-01-25",
-        "to": "2026-01-28"
-      }
-    ]
+    "reservations": []
   },
   {
     "id": 2,
@@ -24,11 +15,6 @@
     "motorization": "1.8 TSI 132 kW",
     "license_plate": "2BC 6789",
     "current_km": 98200,
-    "reservations": [
-      {
-        "from": "2026-01-16",
-        "to": "2026-01-17"
-      }
-    ]
+    "reservations": []
   }
 ]

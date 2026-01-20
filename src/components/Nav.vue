@@ -5,12 +5,12 @@
 </script>
 
 <template>
-  <nav class="nav">
-    <router-link to="/" class="nav-link">
+  <nav class="nav" v-if="auth.isAuthenticated">
+    <router-link v-if="auth.isAuthenticated" to="/" class="nav-link">
       Rezervace vozidla
     </router-link>
 
-    <router-link to="/my-reservations" class="nav-link">
+    <router-link v-if="auth.isAuthenticated" to="/my-reservations" class="nav-link">
       Moje rezervace
     </router-link>
 
@@ -18,7 +18,7 @@
       Admin
     </router-link>
 
-    <button @click="auth.logout" class="nav-link logout">Odhlásit se</button>
+    <button v-if="auth.isAuthenticated" @click="auth.logout" class="logout">Odhlásit se</button>
 
   </nav>
 </template>
@@ -56,5 +56,14 @@
 }
 .logout {
   margin-left: auto;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  color: #667eea;
+  background-color: white;
+  border-radius: 4px;
+}
+.logout:hover {
+  background-color:  #667eea;
+  color: white;
 }
 </style>

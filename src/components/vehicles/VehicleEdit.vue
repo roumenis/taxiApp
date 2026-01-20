@@ -124,7 +124,7 @@ export default {
             <option value="Petrol">Benzín</option>
             <option value="Diesel">Nafta</option>
             <option value="Hybrid">Hybrid</option>
-            <option value="Electric">Elektrika</option>
+            <option value="Electric">Elektro</option>
           </select>
         </div>
 

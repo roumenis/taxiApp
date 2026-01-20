@@ -1,29 +1,52 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import ReturnVehicleModal from '@/components/reservation/ReturnVehicleModal.vue'
+import { useReservations } from '@/composables/useReservations'
+import { useVehicles } from '@/composables/useVehicles'
+import { useAuth } from '@/stores/auth'
 
-const reservations = ref([
-  {
-    id: 1,
-    vehicle: 'Škoda Octavia',
-    start_km: 120345,
-  },
-])
+const auth = useAuth()
+const reservationsComposable = useReservations()
+const vehiclesComposable = useVehicles()
 
 const selectedReservation = ref(null)
+
+const userReservations = computed(() => {
+  const myReservations = reservationsComposable.reservations.value.filter(
+    r => r.user_id === auth.user?.id && r.status !== 'completed'
+  )
+  
+  return myReservations.map(reservation => ({
+    ...reservation,
+    vehicle: vehiclesComposable.getVehicleById(reservation.vehicle_id)
+  }))
+})
+
+onMounted(() => {
+  vehiclesComposable.loadVehicles()
+  reservationsComposable.loadReservations()
+})
+
+const onReservationCompleted = () => {
+  reservationsComposable.loadReservations()
+}
 </script>
 
 <template>
   <h1>Moje rezervace</h1>
 
-  <div v-if="!reservations.length" class="no-reservations">
+  <div v-if="!userReservations.length" class="no-reservations">
     Nemáte žádné aktivní rezervace.
   </div>
 
   <div v-else class="reservations-list">
-    <div v-for="r in reservations" :key="r.id" class="reservation-card">
-      <h3>{{ r.vehicle }}</h3>
-      <p><strong>Počáteční km:</strong> {{ r.start_km }}</p>
+    <div v-for="r in userReservations" :key="r.id" class="reservation-card">
+      <h3>{{ r.vehicle?.name || 'Neznámé vozidlo' }}</h3>
+      <p v-if="r.vehicle"><strong>Motorizace:</strong> {{ r.vehicle.motorization }}</p>
+      <p v-if="r.vehicle"><strong>SPZ:</strong> {{ r.vehicle.license_plate }}</p>
+      <p v-if="r.vehicle"><strong>Počáteční km:</strong> {{ r.vehicle.current_km }}</p>
+      <p><strong>Rezervace od:</strong> {{ r.from }}</p>
+      <p><strong>Rezervace do:</strong> {{ r.to }}</p>
       <button class="btn btn-primary" @click="selectedReservation = r">Vrátit vozidlo</button>
     </div>
   </div>
@@ -32,6 +55,7 @@ const selectedReservation = ref(null)
     v-if="selectedReservation"
     :reservation="selectedReservation"
     @close="selectedReservation = null"
+    @completed="onReservationCompleted"
   />
 </template>
 

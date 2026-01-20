@@ -11,13 +11,20 @@
         isAvailable: {
             type: Boolean,
             default: true
+        },
+        dateFrom: {
+            type: String,
+            default: ''
+        },
+        dateTo: {
+            type: String,
+            default: ''
         }
     });
 
     const vehiclesComposable = useVehicles();
     const showModal = ref(false);
 
-    // Sleduj aktuální auto z composable
     const currentVehicle = computed(() => {
         return vehiclesComposable.getVehicleById(props.vehicle.id) || props.vehicle;
     });
@@ -45,6 +52,8 @@
         <ReservationModal
             v-if="showModal"
             :vehicle="currentVehicle"
+            :date-from="dateFrom"
+            :date-to="dateTo"
             @close="showModal = false"
         />
     </div>

@@ -1,6 +1,7 @@
 <script setup>
 import VehicleCard from './VehicleCard.vue'
 import { computed } from 'vue'
+import { useReservations } from '@/composables/useReservations'
 
 const props = defineProps({
   vehicles: {
@@ -17,21 +18,31 @@ const props = defineProps({
   }
 })
 
+const reservationsComposable = useReservations()
+reservationsComposable.loadReservations()
+
 // Funkce pro kontrolu dostupnosti vozidla v daném období
 const isVehicleAvailable = (vehicle) => {
   if (!props.dateFrom || !props.dateTo) {
-    return true // Pokud nejsou vybrány data, zobrazujem všechna jako dostupná
+    return true 
   }
 
   const checkFrom = new Date(props.dateFrom)
   const checkTo = new Date(props.dateTo)
 
+  // Kombinuj rezervace z JSON a z localStorage
+  const allReservations = [
+    ...(vehicle.reservations || []),
+    ...reservationsComposable.reservations.value.filter(r => r.vehicle_id === vehicle.id && r.status === 'active')
+  ]
+
   // Kontrola jestli se období překrývá s některou rezervací
-  return !vehicle.reservations?.some(reservation => {
+  return !allReservations.some(reservation => {
     const resFrom = new Date(reservation.from)
     const resTo = new Date(reservation.to)
     
     // Pokud se období překrývá, vozidlo není dostupné
+    // checkTo je poslední den, kdy si vozidlo vezmu, takže pokud resFrom > checkTo, jsou bezpečně oddělené
     return !(checkTo < resFrom || checkFrom > resTo)
   })
 }
@@ -63,6 +74,8 @@ const sortedVehicles = computed(() => {
       :key="vehicle.id"
       :vehicle="vehicle"
       :is-available="isVehicleAvailable(vehicle)"
+      :date-from="dateFrom"
+      :date-to="dateTo"
     />
   </div>
 </template>

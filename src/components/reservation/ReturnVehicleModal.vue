@@ -1,12 +1,34 @@
 <script setup>
 import { ref } from 'vue'
+import { useReservations } from '@/composables/useReservations'
 
 const props = defineProps({
   reservation: Object,
 })
 
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close', 'completed'])
 const endKm = ref('')
+const today = new Date().toISOString().split('T')[0]
+const returnDate = ref(today)
+const reservationsComposable = useReservations()
+
+const confirm = () => {
+  if (!endKm.value) {
+    alert('Prosím, zadejte aktuální stav km')
+    return
+  }
+
+  const updated = reservationsComposable.completeReservation(
+    props.reservation.id, 
+    parseInt(endKm.value),
+    returnDate.value
+  )
+  if (updated) {
+    alert('Vozidlo bylo vráceno')
+    emit('completed')
+    emit('close')
+  }
+}
 </script>
 
 <template>
@@ -15,12 +37,21 @@ const endKm = ref('')
       <h3>Vrácení vozidla</h3>
 
       <p><strong>Vozidlo:</strong> {{ reservation.vehicle }}</p>
+      <p><strong>Původně do:</strong> {{ reservation.to }}</p>
+
+      <label for="returnDate">Datum vrácení</label>
+      <input 
+        id="returnDate" 
+        type="date" 
+        v-model="returnDate"
+        :max="reservation.to"
+      />
 
       <label for="endKm">Aktuální stav km</label>
       <input id="endKm" type="number" v-model="endKm" />
 
       <div class="modal-buttons">
-        <button class="btn btn-primary" @click="emit('close')">Potvrdit</button>
+        <button class="btn btn-primary" @click="confirm">Potvrdit</button>
         <button class="btn btn-secondary" @click="emit('close')">Zrušit</button>
       </div>
     </div>
